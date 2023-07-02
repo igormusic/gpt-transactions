@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sqlserver
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ChatDemo2023
+    ports:
+      - 1433:1433
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "until nc -z -w5 db 1433; do sleep 1; done" ]
+      interval: 5s
+      retries: 10
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data:/var/opt/mssql
