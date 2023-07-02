@@ -68,9 +68,9 @@ def init():
             conn.close()
             exit()
 
-    customer_count = 10
-    account_count = 100
-    transaction_count = 1000
+    customer_count = 1000
+    account_count = 10000
+    transaction_count = 100000
 
     # Generate and insert customers
     customers = []
@@ -117,7 +117,7 @@ def init():
         action_date = fake.date_between(start_date=account['account_open_date'], end_date='today')
         value_date = fake.date_between(start_date=action_date - timedelta(days=1), end_date=action_date + timedelta(days=1))
 
-        amount = fake.random_int(min=-10000, max=10000)
+        amount = fake.random_int(min=0, max=10000)
         transaction_type = fake.random_element(elements=('Deposit', 'Withdrawal'))
         transactions.append({
             'action_date': action_date,

@@ -1,5 +1,9 @@
+import csv
 import os
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date, ForeignKey, Numeric, URL
+from io import StringIO
+
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date, ForeignKey, Numeric, URL, text
+from sqlalchemy.orm import sessionmaker
 
 
 class Database:
@@ -33,3 +37,38 @@ class Database:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
+
+    def query(self, query):
+        session_factory = sessionmaker(self.engine)
+
+        with session_factory() as session:
+            try:
+                result = session.execute(text(query))
+            except Exception as e:
+                print(e)
+                raise ValueError("Invalid query")
+
+            columns = result.keys()
+
+            # Create a string buffer
+            csv_buffer = StringIO()
+            csv_writer = csv.writer(csv_buffer)
+
+            # Write the column headers
+            csv_writer.writerow(columns)
+
+            # Write the rows
+            for row in result:
+                csv_writer.writerow(row)
+
+            # Get the CSV content from the buffer
+            return csv_buffer.getvalue()
+
+    def query_schema(self, tables):
+        table_list = ", ".join(tables)
+        sql = f"SELECT CONCAT(TABLE_SCHEMA, '.', TABLE_NAME, ', ', COLUMN_NAME, ', ', DATA_TYPE) " \
+              f"AS 'Table, Column, DataType' " \
+              f"FROM INFORMATION_SCHEMA.COLUMNS " \
+              f"WHERE TABLE_NAME IN ({table_list})"
+
+        return self.query(sql)
