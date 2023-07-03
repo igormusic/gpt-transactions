@@ -12,16 +12,11 @@ def get_training_messages():
             "{\"recipient\": \"USER\", \"message\":\"I understand.\"}."},
         {"role": "user", "content":
             "You can address the SQL Server by using the SERVER recipient. When calling the server, you must also "
-            "specify an action. The action can be QUERY when you want to QUERY the database, or SCHEMA when you need "
-            "SCHEMA information for a comma separated list of tables. The format you will use for requesting schema "
-            "information is as follows: "
-            "{\"recipient\":\"SERVER\", \"action\":\"SCHEMA\", \"message\":\"Customer, Account, Transaction\"}. "
+            "specify an action. The action can be QUERY when you want to QUERY the database. "
             "The format you will use for executing a query is as follows: "
             "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT SUM(amount) FROM Transactions;\"}"},
         {"role": "user", "content": "The following tables are available in the database: "
-                                    "Customer, Account, Transactions. "
-                                    "You will always first request the SCHEMA for a table before using "
-                                    "the table in a QUERY."},
+                                    "Customer, Account, Transactions. "},
         {"role": "user", "content": "Account Types can be: Checking, Savings, Investment"},
         {"role": "user", "content": "Transaction Types can be: Deposit, Withdrawal"},
         {"role": "user", "content": "SQL Server database has following data model:\n"
