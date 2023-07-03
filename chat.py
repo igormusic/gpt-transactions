@@ -149,14 +149,10 @@ class Chat:
                 messages=self.messages
             )
 
-
             response = completion.choices[0].message.content
             logging.debug(response)
             self.messages.append({"role": "assistant", "content": response})
 
-            #  {"recipient":"SERVER", "action":"QUERY", "message":"SELECT COUNT(*) FROM Transactions WHERE
-            #  YEAR(action_date) = 2022 AND account_id IN (SELECT account_id FROM Account
-            #  WHERE customer_id IN (SELECT customer_id FROM Customer WHERE country = 'China'))"}
             return response
         except Exception as e:
             logging.error(e)

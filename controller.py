@@ -26,7 +26,8 @@ class ChatController:
         response_string = self.chat.message(message, sender)
         try:
             response = json.loads(response_string[:-1] if response_string.endswith('.') else response_string)
-        except ValueError:
+        except Exception as e:
+            print(e)
             print(f"value error : {response_string}")
             return self.message("Please repeat that answer but use valid JSON only.", "SYSTEM", counter + 1)
         match response["recipient"]:
