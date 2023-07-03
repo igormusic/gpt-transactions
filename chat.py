@@ -24,30 +24,29 @@ class Chat:
             "The format you will use for executing a query is as follows: "
             "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT SUM(amount) FROM Transactions;\"}"},
         {"role": "user", "content": "The following tables are available in the database: "
-                                    "Customer, Account, Transactions. "
-                                    "You will always first request the SCHEMA for a table before using "
-                                    "the table in a QUERY."},
+                                      "Customer, Account, Transactions. "
+                                      "You will always first request the SCHEMA for a table before using "
+                                      "the table in a QUERY."},
         {"role": "user", "content": "Account Types can be: Checking, Savings, Investment"},
         {"role": "user", "content": "Transaction Types can be: Deposit, Withdrawal"},
+        {"role": "user", "content": "SQL Server database has following data model:\n"
+                                      "Table, Column, DataType\n"
+                                      "Account, account_id, int\n"
+                                      "Account, account_number, varchar\n"
+                                      "Account, account_type, varchar\n"
+                                      "Account, customer_id, int\n"
+                                      "Account, account_open_date, date\n"
+                                      "Customer, customer_id, int\n"
+                                      "Customer, customer_name, varchar\n"
+                                      "Customer, country, varchar\n"
+                                      "Transactions, transaction_id, int\n"
+                                      "Transactions, action_date, date\n"
+                                      "Transactions, value_date, date\n"
+                                      "Transactions, account_id, int\n"
+                                      "Transactions, amount, numeric\n"
+                                      "Transactions, transaction_type, varchar\n"},
         {"role": "user",
          "content": "Let's start! How many transactions were processed in 2022 for Customers in China?"},
-        {"role": "assistant", "content":
-            "{\"recipient\":\"SERVER\", \"action\":\"SCHEMA\", \"message\":\"Customer, Account, Transactions\"}"},
-        {"role": "user", "content": "Table, Column, DataType\n"
-                                    "Account, account_id, int\n"
-                                    "Account, account_number, varchar\n"
-                                    "Account, account_type, varchar\n"
-                                    "Account, customer_id, int\n"
-                                    "Account, account_open_date, date\n"
-                                    "Customer, customer_id, int\n"
-                                    "Customer, customer_name, varchar\n"
-                                    "Customer, country, varchar\n"
-                                    "Transactions, transaction_id, int\n"
-                                    "Transactions, action_date, date\n"
-                                    "Transactions, value_date, date\n"
-                                    "Transactions, account_id, int\n"
-                                    "Transactions, amount, numeric\n"
-                                    "Transactions, transaction_type, varchar\n"},
         {"role": "assistant", "content":
             "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT count(*) as COUNT"
             "FROM Customer C "
@@ -112,21 +111,20 @@ class Chat:
                     "  INNER JOIN account_balance AB ON A.account_id = AB.account_id "
                     "WHERE C.country ='Canada' "
                     " AND A.account_type = 'Investment' "
-                    " AND AB.balance > 10000 "
                     "ORDER BY AB.balance DESC\"}"},
         {"role": "user", "content": "customer_name,  balance\n"
-                                    "'Johnson, Martin and Willis', 57777.00\n"
-                                    "'Browning, Rivera and Sellers', 55477.00\n"
-                                    "'Jackson - Cobb', 38882.00\n"
-                                    "'Mitchell - Smith', 38444.00\n"
-                                    "'Jackson - Cobb', 36949.00\n"},
+                                        "'Johnson, Martin and Willis', 57777.00\n"
+                                        "'Browning, Rivera and Sellers', 55477.00\n"
+                                        "'Jackson - Cobb', 38882.00\n"
+                                        "'Mitchell - Smith', 38444.00\n"
+                                        "'Jackson - Cobb', 36949.00\n"},
         {"role": "assistant", "content": "{\"recipient\": \"USER\", \"message\":\"Top 5 Customers in Canada "
-                                         "by Investment account balance are:"
+                                         "by Investment account balance are: "
                                          "Johnson, Martin and Willis (57777.00), "
-                                         "Browning, Rivera and Sellers (55477.00)"
-                                         "Jackson-Cobb (38882.00),"
-                                         "Mitchell-Smith (38444.00)"
-                                         "Jackson-Cobb (36949.00)  \"}."},
+                                         "Browning, Rivera and Sellers (55477.00) "
+                                         "Jackson-Cobb (38882.00) "
+                                         "Mitchell-Smith (38444.00) "
+                                         "Jackson-Cobb (36949.00) \"}."},
 
     ]
 

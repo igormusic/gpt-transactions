@@ -52,7 +52,7 @@ class Database:
 
             # Create a string buffer
             csv_buffer = StringIO()
-            csv_writer = csv.writer(csv_buffer)
+            csv_writer = csv.writer(csv_buffer, quotechar="'", delimiter=",")
 
             # Write the column headers
             csv_writer.writerow(columns)
@@ -64,11 +64,3 @@ class Database:
             # Get the CSV content from the buffer
             return csv_buffer.getvalue()
 
-    def query_schema(self, tables):
-        table_list = ", ".join(tables)
-        sql = f"SELECT CONCAT(TABLE_SCHEMA, '.', TABLE_NAME, ', ', COLUMN_NAME, ', ', DATA_TYPE) " \
-              f"AS 'Table, Column, DataType' " \
-              f"FROM INFORMATION_SCHEMA.COLUMNS " \
-              f"WHERE TABLE_NAME IN ({table_list})"
-
-        return self.query(sql)
