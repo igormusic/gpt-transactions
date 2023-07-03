@@ -101,7 +101,7 @@ class Chat:
          "content": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"WITH account_balance(account_id, "
                     "balance) AS "
                     "(SELECT account_id, sum(case "
-                    "when T.transaction_type = 'Deposit' then T.amount"
+                    "when T.transaction_type = 'Deposit' then T.amount "
                     "else -T.amount "
                     "end) as BALANCE "
                     "FROM Transactions T "

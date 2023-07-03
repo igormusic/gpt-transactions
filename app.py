@@ -11,7 +11,7 @@ logging.basicConfig(filename='debug.log', filemode='a', level=logging.DEBUG,
 
 
 def main():
-    os.system('cls' if os.name == 'nt' else 'clear')
+
     api_key = os.environ.get('GPT_API_KEY')
     print("Ask any question about Customers, Accounts and Transactions. Enter 'q' to quit. Enter 'r' to reset chat.")
     chat: Chat = Chat(api_key)
@@ -27,9 +27,9 @@ def main():
             result = controller.message(message=user_input, sender="USER")
             print(f"ChatGPT: {result}")
         except ValueError:
-            print("Invalid input. Please enter a number or 'q' to quit.")
+            print("Invalid input. Please enter question or 'q' to quit.")
 
 
 if __name__ == "__main__":
-    # dbinit.init()
+    dbinit.init()
     main()

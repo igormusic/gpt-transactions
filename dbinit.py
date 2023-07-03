@@ -66,7 +66,7 @@ def init():
         if existing_records_count > 0:
             print("There are already records in the customer_table.")
             conn.close()
-            exit()
+            return
 
     customer_count = 1000
     account_count = 10000
