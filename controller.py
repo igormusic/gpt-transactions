@@ -15,6 +15,7 @@ MAGENTA = "\033[0;35m"
 CYAN = "\033[0;36m"
 WHITE = "\033[0;37m"
 
+
 class ChatController:
     def __init__(self, chat):
         self.db = Database()

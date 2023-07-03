@@ -5,17 +5,23 @@ import openai
 from training import get_training_messages
 
 
+def load_string_from_file(file_path):
+    with open(file_path, 'r') as file:
+        string_data = file.read()
+    return string_data
+
+
 class Chat:
 
-    def __init__(self, api_key, model="gpt-3.5-turbo"):
+    def __init__(self, api_key, model):
         openai.api_key = api_key
         self.model = model
-        self.messages = get_training_messages().copy()
-
-    def load_string_from_file(self, file_path):
-        with open(file_path, 'r') as file:
-            string_data = file.read()
-        return string_data
+        if model[:2] == "ft":
+            # pre-trained model
+            self.messages = []
+        else:
+            # start every completion with training set + messages captured in the session
+            self.messages = get_training_messages().copy()
 
     def message(self, message, sender):
         logging.debug(message)

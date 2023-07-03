@@ -12,9 +12,10 @@ logging.basicConfig(filename='debug.log', filemode='a', level=logging.DEBUG,
 
 def main():
 
-    api_key = os.environ.get('GPT_API_KEY')
+    api_key = os.environ.get('OPENAI_API_KEY')
+    model = os.environ.get('OPEN_AI_MODEL')
     print("Ask any question about Customers, Accounts and Transactions. Enter 'q' to quit. Enter 'r' to reset chat.")
-    chat: Chat = Chat(api_key)
+    chat: Chat = Chat(api_key=api_key, model=model)
     controller = ChatController(chat)
     while True:
         user_input = input("Question: ")
