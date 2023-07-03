@@ -95,9 +95,42 @@ class Chat:
         {"role": "assistant",
          "content": "{\"recipient\": \"USER\", \"message\":\"2691873.00 of deposits were processed"
                     " for Savings accounts in 2023.\"}."},
+        {"role": "user", "content": "thank you! Now the next question. "
+                                    "What are top 5 Customers in Canada by Investment account balance?"},
+        {"role": "assistant",
+         "content": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"WITH account_balance(account_id, "
+                    "balance) AS "
+                    "(SELECT account_id, sum(case "
+                    "when T.transaction_type = 'Deposit' then T.amount"
+                    "else -T.amount "
+                    "end) as BALANCE "
+                    "FROM Transactions T "
+                    "GROUP BY account_id) "
+                    "SELECT Top 5 C.customer_name, AB.balance "
+                    "FROM Customer C "
+                    " INNER JOIN Account A ON C.customer_id = A.customer_id "
+                    "  INNER JOIN account_balance AB ON A.account_id = AB.account_id "
+                    "WHERE C.country ='Canada' "
+                    " AND A.account_type = 'Investment' "
+                    " AND AB.balance > 10000 "
+                    "ORDER BY AB.balance DESC\"}"},
+        {"role": "user", "content": "customer_name,  balance\n"
+                                    "'Johnson, Martin and Willis', 57777.00\n"
+                                    "'Browning, Rivera and Sellers', 55477.00\n"
+                                    "'Jackson - Cobb', 38882.00\n"
+                                    "'Mitchell - Smith', 38444.00\n"
+                                    "'Jackson - Cobb', 36949.00\n"},
+        {"role": "assistant", "content": "{\"recipient\": \"USER\", \"message\":\"Top 5 Customers in Canada "
+                                         "by Investment account balance are:"
+                                         "Johnson, Martin and Willis (57777.00), "
+                                         "Browning, Rivera and Sellers (55477.00)"
+                                         "Jackson-Cobb (38882.00),"
+                                         "Mitchell-Smith (38444.00)"
+                                         "Jackson-Cobb (36949.00)  \"}."},
+
     ]
 
-    def __init__(self, api_key,  model="gpt-3.5-turbo"):
+    def __init__(self, api_key, model="gpt-3.5-turbo"):
         openai.api_key = api_key
         self.model = model
         self.messages = self.training_messages.copy()
@@ -109,18 +142,25 @@ class Chat:
 
         self.messages.append({"role": "user", "content": message})
 
-        completion = openai.ChatCompletion.create(
-            model=self.model,
-            messages=self.messages
-        )
-        response = completion.choices[0].message.content
-        logging.debug(response)
-        self.messages.append({"role": "assistant", "content": response})
+        try:
 
-        #  {"recipient":"SERVER", "action":"QUERY", "message":"SELECT COUNT(*) FROM Transactions WHERE
-        #  YEAR(action_date) = 2022 AND account_id IN (SELECT account_id FROM Account
-        #  WHERE customer_id IN (SELECT customer_id FROM Customer WHERE country = 'China'))"}
-        return response
+            completion = openai.ChatCompletion.create(
+                model=self.model,
+                messages=self.messages
+            )
+
+
+            response = completion.choices[0].message.content
+            logging.debug(response)
+            self.messages.append({"role": "assistant", "content": response})
+
+            #  {"recipient":"SERVER", "action":"QUERY", "message":"SELECT COUNT(*) FROM Transactions WHERE
+            #  YEAR(action_date) = 2022 AND account_id IN (SELECT account_id FROM Account
+            #  WHERE customer_id IN (SELECT customer_id FROM Customer WHERE country = 'China'))"}
+            return response
+        except Exception as e:
+            logging.error(e)
+            return "Sorry, I don't understand you. Please try again."
 
     def reset(self):
         self.messages = self.training_messages.copy()
