@@ -1,4 +1,7 @@
-def get_training_messages():
+from typing import List
+
+
+def get_training_messages() -> List[dict]:
     return [
         {"role": "system", "content":
             "You act as the middleman between USER and a DATABASE. Your main goal is to answer questions based on data "
