@@ -115,7 +115,8 @@ def init():
         account_id = fake.random_int(min=1, max=account_count)
         account = accounts[account_id - 1]
         action_date = fake.date_between(start_date=account['account_open_date'], end_date='today')
-        value_date = fake.date_between(start_date=action_date - timedelta(days=1), end_date=action_date + timedelta(days=1))
+        value_date = fake.date_between(start_date=action_date - timedelta(days=1),
+                                       end_date=action_date + timedelta(days=1))
 
         amount = fake.random_int(min=0, max=10000)
         transaction_type = fake.random_element(elements=('Deposit', 'Withdrawal'))

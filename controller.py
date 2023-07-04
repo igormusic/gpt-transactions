@@ -1,19 +1,8 @@
 import json
 
 from chat import Chat
+from colors import RED, RESET, YELLOW, BLUE
 from db import Database
-
-RESET = "\033[0m"
-
-# Text colors
-BLACK = "\033[0;30m"
-RED = "\033[0;31m"
-GREEN = "\033[0;32m"
-YELLOW = "\033[0;33m"
-BLUE = "\033[0;34m"
-MAGENTA = "\033[0;35m"
-CYAN = "\033[0;36m"
-WHITE = "\033[0;37m"
 
 
 class ChatController:
@@ -24,15 +13,18 @@ class ChatController:
     def message(self, message, sender, counter=0):
         if counter > 4:
             return 'error: too many requests'
-        response_string = self.chat.message(message, sender)
+
+        response_string:str = self.chat.message(message, sender)
+
         try:
             response_string = response_string.replace('\n', ' ')
             response_string = response_string.replace('\r', ' ')
             response = json.loads(response_string[:-1] if response_string.endswith('.') else response_string)
         except Exception as e:
-            print(e)
-            print(f"value error : {response_string}")
+            print(f"{RED}error: {e}{RESET}")
+            print(f"{RED}value error : {response_string}{RESET}")
             return self.message("Please repeat that answer but use valid JSON only.", "user", counter + 1)
+
         match response["recipient"]:
             case "USER":
                 return response["message"]

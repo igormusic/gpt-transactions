@@ -1,16 +1,8 @@
 import json
 import logging
-from typing import List
-
 import openai
-
+from typing import List
 from training import get_training_messages
-
-
-def load_string_from_file(file_path):
-    with open(file_path, 'r') as file:
-        string_data = file.read()
-    return string_data
 
 
 class Chat:
@@ -20,10 +12,10 @@ class Chat:
         self.model: str = model
         self.messages: List[dict] = get_training_messages().copy()
 
-    def message(self, message: str, sender: str)-> str:
+    def message(self, message: str, sender: str) -> str:
         logging.debug(message)
         if sender:
-            message:str = json.dumps({'message': message, 'sender': sender})
+            message: str = json.dumps({'message': message, 'sender': sender})
 
         self.messages.append({"role": "user", "content": message})
 
@@ -34,7 +26,7 @@ class Chat:
                 messages=self.messages
             )
 
-            response:str = completion.choices[0].message.content
+            response: str = completion.choices[0].message.content
             logging.debug(response)
             self.messages.append({"role": "assistant", "content": response})
 
