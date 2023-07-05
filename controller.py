@@ -15,7 +15,7 @@ class ChatController:
         if counter > 4:
             return 'error: too many requests'
 
-        response_string:str = self.chat.message(message, sender)
+        response_string: str = self.chat.message(message, sender)
 
         try:
             response_string = response_string.replace('\n', ' ')
@@ -34,7 +34,7 @@ class ChatController:
                     case "QUERY":
                         query = response["message"]
                         print(f"{YELLOW}{query}{RESET}")
-                        text,row_count,column_count, table_data = self.db.query(query)
+                        text, row_count, column_count, table_data = self.db.query(query)
 
                         # Pretty print the table using tabulate
                         table = tabulate(table_data, headers="firstrow", tablefmt="fancy_grid")
@@ -44,10 +44,10 @@ class ChatController:
                         if row_count == 0:
                             return self.message("No results found", "user", counter + 1)
                         else:
-                            if row_count > 1 and column_count > 2:
-                                return None
-                            else:
+                            if row_count <= 3 and column_count <= 3:
                                 return self.message(text, None, counter + 1)
+                            else:
+                                return None
                     case _:
                         print('error invalid action')
                         print(response)
