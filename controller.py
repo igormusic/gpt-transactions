@@ -1,5 +1,6 @@
 import csv
 import json
+import sqlparse
 
 from tabulate import tabulate
 from colors import RED, RESET, YELLOW, BLUE, MAGENTA
@@ -33,7 +34,11 @@ class ChatController:
                 match response["action"]:
                     case "QUERY":
                         query = response["message"]
-                        print(f"{YELLOW}{query}{RESET}")
+
+                        # Parse and format the SQL statement
+                        formatted_sql = sqlparse.format(query, reindent=True, keyword_case='upper')
+
+                        print(f"{YELLOW}{formatted_sql}{RESET}")
                         text, row_count, column_count, table_data = self.db.query(query)
 
                         # Pretty print the table using tabulate
