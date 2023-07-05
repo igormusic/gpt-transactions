@@ -231,5 +231,8 @@ def get_training_messages() -> List[dict]:
                                          "Taylor-Flowers (310), 17 accounts\n"
                                          "Goodwin, Hickman and James (862), 16 accounts\n"
                                          "Davis-Lee (714), 15 accounts\n"},
-
+        {"role": "user", "content": "thank you! From now on when I ask for statement always include balance "
+         "calculated with Deposit transactions being positive and other transactions being negative. When I ask "
+            "for balance always include balance calculated with Deposit transactions being positive and other "
+         "transactions being negative."}
     ]
