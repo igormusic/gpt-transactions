@@ -1,7 +1,8 @@
+import csv
 import json
 
-from chat import Chat
-from colors import RED, RESET, YELLOW, BLUE
+from tabulate import tabulate
+from colors import RED, RESET, YELLOW, BLUE, MAGENTA
 from db import Database
 
 
@@ -33,9 +34,20 @@ class ChatController:
                     case "QUERY":
                         query = response["message"]
                         print(f"{YELLOW}{query}{RESET}")
-                        result = self.db.query(query)
-                        print(f"{BLUE}{result}{RESET}")
-                        return self.message(result, None, counter + 1)
+                        text,row_count,column_count, table_data = self.db.query(query)
+
+                        # Pretty print the table using tabulate
+                        table = tabulate(table_data, headers="firstrow", tablefmt="fancy_grid")
+
+                        print(f"{MAGENTA}{table}{RESET}")
+
+                        if row_count == 0:
+                            return self.message("No results found", "user", counter + 1)
+                        else:
+                            if row_count > 1 and column_count > 2:
+                                return None
+                            else:
+                                return self.message(text, None, counter + 1)
                     case _:
                         print('error invalid action')
                         print(response)

@@ -1,8 +1,10 @@
 import csv
 import os
 from io import StringIO
+from typing import Any
 
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date, ForeignKey, Numeric, URL, text
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Date, ForeignKey, Numeric, URL, text, \
+    Result
 from sqlalchemy.orm import sessionmaker
 
 
@@ -38,7 +40,7 @@ class Database:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.connection.close()
 
-    def query(self, query):
+    def query(self, query) -> tuple[str, int, int, Any]:
         session_factory = sessionmaker(self.engine)
 
         with session_factory() as session:
@@ -56,11 +58,11 @@ class Database:
 
             # Write the column headers
             csv_writer.writerow(columns)
+            rows = result.fetchall()
+            csv_writer.writerows(rows)
 
-            # Write the rows
-            for row in result:
-                csv_writer.writerow(row)
+            # Convert rows and columns to a list of lists for tabulate
+            table_data = [columns] + [list(row) for row in rows]
 
             # Get the CSV content from the buffer
-            return csv_buffer.getvalue()
-
+            return csv_buffer.getvalue(), len(rows), len(columns), table_data

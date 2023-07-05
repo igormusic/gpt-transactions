@@ -31,9 +31,10 @@ def main():
             continue
         try:
             result = controller.message(message=user_input, sender="USER")
-            print(f"ChatGPT: {result}")
+            if result is not None:
+                print(f"ChatGPT: {result}")
         except ValueError:
-            print(f"{RED}Invalid input. Please enter question or 'q' to quit.{RESET}")
+            print(f"{RED}Invalid input. Please enter question or 'q' to quit or 'r' to reset.{RESET}")
 
 
 if __name__ == "__main__":
